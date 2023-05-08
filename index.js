@@ -32,6 +32,12 @@ async function run() {
       const result = await coffeeDB.insertOne(newCoffee)
       res.send(result)
     });
+
+    app.get('/coffees', async (req, res) => {
+      const result = await coffeeDB.find().toArray()
+      console.log(result)
+      res.send(result)
+    })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
