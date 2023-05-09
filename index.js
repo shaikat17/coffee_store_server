@@ -45,6 +45,45 @@ async function run() {
       const result = await coffeeDB.deleteOne({"_id" : new ObjectId(id)})
       res.send(result)
     })
+
+    app.get('/coffee/:id', async (req, res) => {
+      const id = req.params.id
+      const result = await coffeeDB.findOne({"_id": new ObjectId(id)})
+      res.send(result)
+    })
+
+    app.put('/coffee/:id', async (req, res) => {
+      const id = req.params.id
+      const {
+        coffeeName,
+        chefName,
+        coffeeSupplier,
+        taste,
+        coffeeCategory,
+        coffeeDetails,
+        coffeePrice,
+        coffeePhotoUrl,
+      } = req.body
+      const query = {"_id": new ObjectId(id)}
+      const update = {
+        $set: {
+          coffeeName,
+          chefName,
+          coffeeSupplier,
+          taste,
+          coffeeCategory,
+          coffeeDetails,
+          coffeePrice,
+          coffeePhotoUrl,
+        }
+      }
+      const options = {
+        upsert: true
+      }
+      // console.log(req.body)
+      const result = await coffeeDB.updateOne(query, update, options)
+      res.send(result)
+    })
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
